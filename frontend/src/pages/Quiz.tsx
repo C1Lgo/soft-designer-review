@@ -1,96 +1,49 @@
 /**
  * 答题页面
  * 顶部进度条 + 题号，题目卡片，选项列表，底部按钮
+ * 数据来源：本地题库 allQuestions
  */
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useMemo } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import useStore from '@/store/useStore'
 import QuestionCard from '@/components/QuestionCard'
 import OptionItem from '@/components/OptionItem'
+import { allQuestions } from '@/data/questions'
 import type { Question } from '@/types'
 
-/** 模拟题目数据 */
-const mockQuestions: Question[] = [
-  {
-    id: 'q1',
-    chapterId: 'ch02',
-    type: 'single',
-    text: '以下哪种数据结构遵循"先进后出"（FILO）的原则？',
-    options: [
-      { label: 'A', text: '队列' },
-      { label: 'B', text: '栈' },
-      { label: 'C', text: '链表' },
-      { label: 'D', text: '哈希表' },
-    ],
-    answer: 'B',
-    explanation: '栈（Stack）是一种后进先出（LIFO）的数据结构，最后压入的元素最先被弹出。',
-  },
-  {
-    id: 'q2',
-    chapterId: 'ch02',
-    type: 'single',
-    text: '二叉树中，每个节点最多有几个子节点？',
-    options: [
-      { label: 'A', text: '1个' },
-      { label: 'B', text: '2个' },
-      { label: 'C', text: '3个' },
-      { label: 'D', text: '没有限制' },
-    ],
-    answer: 'B',
-    explanation: '二叉树中每个节点最多有2个子节点，分别称为左子节点和右子节点。',
-  },
-  {
-    id: 'q3',
-    chapterId: 'ch02',
-    type: 'single',
-    text: '快速排序的平均时间复杂度是？',
-    options: [
-      { label: 'A', text: 'O(n)' },
-      { label: 'B', text: 'O(n log n)' },
-      { label: 'C', text: 'O(n²)' },
-      { label: 'D', text: 'O(log n)' },
-    ],
-    answer: 'B',
-    explanation: '快速排序的平均时间复杂度为 O(n log n)，是实践中最常用的排序算法之一。',
-  },
-  {
-    id: 'q4',
-    chapterId: 'ch02',
-    type: 'judge',
-    text: '数组在内存中的存储是连续的。',
-    options: [
-      { label: 'A', text: '正确' },
-      { label: 'B', text: '错误' },
-    ],
-    answer: 'A',
-    explanation: '数组在内存中占用一段连续的存储空间，这也是数组支持随机访问的原因。',
-  },
-  {
-    id: 'q5',
-    chapterId: 'ch02',
-    type: 'single',
-    text: '以下哪种算法不是图的最短路径算法？',
-    options: [
-      { label: 'A', text: 'Dijkstra算法' },
-      { label: 'B', text: 'Floyd算法' },
-      { label: 'C', text: 'Kruskal算法' },
-      { label: 'D', text: 'Bellman-Ford算法' },
-    ],
-    answer: 'C',
-    explanation: 'Kruskal算法是最小生成树算法，不是最短路径算法。',
-  },
-]
+/** 随机抽取指定数量的题目 */
+function getRandomQuestions(questions: Question[], count: number): Question[] {
+  const shuffled = [...questions].sort(() => Math.random() - 0.5)
+  return shuffled.slice(0, count)
+}
 
 export default function Quiz() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { currentQuiz, startQuiz, answerQuestion, finishQuiz, addWrongQuestion } =
     useStore()
 
-  // 如果没有开始答题，初始化模拟题目
+  // 从 URL 参数获取章节 ID
+  const chapterId = searchParams.get('chapter') || ''
+
+  // 根据章节筛选题目，如果没有指定章节则随机抽取5道题
+  const filteredQuestions = useMemo(() => {
+    if (chapterId) {
+      const chapterQuestions = allQuestions.filter(
+        (q) => q.chapterId === chapterId
+      )
+      return chapterQuestions.length > 0
+        ? chapterQuestions
+        : getRandomQuestions(allQuestions, 5)
+    }
+    return getRandomQuestions(allQuestions, 5)
+  }, [chapterId])
+
+  // 如果没有开始答题，使用筛选后的真实题目
   const questions = currentQuiz.questions.length > 0
     ? currentQuiz.questions
-    : mockQuestions
+    : filteredQuestions
 
   const currentIndex = currentQuiz.currentIndex
   const currentQuestion = questions[currentIndex]
@@ -136,9 +89,9 @@ export default function Quiz() {
     }
   }
 
-  // 初始化答题（仅在首次进入时）
+  // 初始化答题（仅在首次进入时，使用筛选后的真实题目）
   if (currentQuiz.questions.length === 0) {
-    startQuiz(mockQuestions)
+    startQuiz(filteredQuestions)
   }
 
   if (!currentQuestion) return null

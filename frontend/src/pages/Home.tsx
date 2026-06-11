@@ -2,22 +2,61 @@
  * 首页 - 学习路径
  * 顶部绿色渐变 header，显示用户头像、连胜天数、宝石
  * 学习路径列表，底部导航栏
+ * 章节进度根据用户答题记录动态计算
  */
+import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import useStore from '@/store/useStore'
 import { chapters } from '@/data/chapters'
+import { allQuestions } from '@/data/questions'
 import PathNode from '@/components/PathNode'
 import BottomNav from '@/components/BottomNav'
 
 export default function Home() {
   const navigate = useNavigate()
   const user = useStore((s) => s.user)
+  const wrongQuestions = useStore((s) => s.wrongQuestions)
 
-  /** 点击章节节点 */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleChapterClick = (_chapterId: string) => {
-    navigate('/quiz')
+  // 根据用户答题记录动态计算各章节进度
+  const chaptersWithProgress = useMemo(() => {
+    // 收集所有已答过的题目 ID（来自错题记录中的题目）
+    const answeredIds = new Set(wrongQuestions.map((wq) => wq.question.id))
+
+    return chapters.map((chapter) => {
+      // 该章节在题库中的总题数
+      const totalInBank = allQuestions.filter(
+        (q) => q.chapterId === chapter.id
+      ).length
+      // 已答题数（基于错题记录推算）
+      const answered = allQuestions.filter(
+        (q) => q.chapterId === chapter.id && answeredIds.has(q.id)
+      ).length
+
+      // 动态计算进度和状态
+      const progress = totalInBank > 0 ? Math.round((answered / totalInBank) * 100) : 0
+      const status: 'completed' | 'current' | 'locked' =
+        progress >= 100
+          ? 'completed'
+          : progress > 0
+            ? 'current'
+            : chapter.status === 'completed'
+              ? 'completed'
+              : chapter.status
+
+      return {
+        ...chapter,
+        totalQuestions: totalInBank,
+        completedQuestions: answered,
+        progress,
+        status,
+      }
+    })
+  }, [wrongQuestions])
+
+  /** 点击章节节点，跳转到对应章节的答题页面 */
+  const handleChapterClick = (chapterId: string) => {
+    navigate(`/quiz?chapter=${chapterId}`)
   }
 
   return (
@@ -79,7 +118,7 @@ export default function Home() {
         <div className="px-5 pt-6 space-y-6">
           <h2 className="text-white font-bold text-lg">学习路径</h2>
           <div className="space-y-3">
-            {chapters.map((chapter, index) => (
+            {chaptersWithProgress.map((chapter, index) => (
               <PathNode
                 key={chapter.id}
                 chapter={chapter}
