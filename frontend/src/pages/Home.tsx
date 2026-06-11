@@ -70,23 +70,23 @@ export default function Home() {
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#58CC02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </div>
 
-            {/* 连胜和宝石 */}
+            {/* 连胜和宝石 - 白色背景 + 彩色文字 + 阴影 */}
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1 bg-white/20 rounded-full px-2.5 py-1">
+              <div className="flex items-center gap-1 bg-white rounded-lg px-2.5 py-1 shadow-sm">
                 <span className="text-sm">🔥</span>
-                <span className="text-white font-bold text-xs">{user.streak || 12}天</span>
+                <span className="text-[#FF9600] font-bold text-xs">{user.streak || 12}天</span>
               </div>
-              <div className="flex items-center gap-1 bg-white/20 rounded-full px-2.5 py-1">
+              <div className="flex items-center gap-1 bg-white rounded-lg px-2.5 py-1 shadow-sm">
                 <span className="text-sm">💎</span>
-                <span className="text-white font-bold text-xs">{user.gems || 258}</span>
+                <span className="text-[#1CB0F6] font-bold text-xs">{user.gems || 258}</span>
               </div>
             </div>
           </div>
 
           {/* 第二行：大标题和副标题 */}
           <div className="text-center">
-            <h1 className="text-white font-bold text-2xl mb-1">软件设计师</h1>
-            <p className="text-white/80 text-sm">今日已学习 15 分钟</p>
+            <h1 className="text-white font-bold text-[26px] tracking-wide mb-1">软件设计师</h1>
+            <p className="text-white/60 text-sm">今日已学习 15 分钟</p>
           </div>
         </div>
 

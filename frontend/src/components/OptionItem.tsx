@@ -26,21 +26,21 @@ export default function OptionItem({
   disabled,
   onClick,
 }: OptionItemProps) {
-  // 根据状态确定边框、背景和标签样式
-  let containerClass = 'border-gray-200 bg-white hover:border-[#58CC02] hover:bg-[#f1f8e9]'
+  // 根据状态确定边框、背景和标签样式（3D 边框风格）
+  let containerClass = 'border-[#E5E5E5] bg-white hover:border-[#58CC02] hover:bg-[#f1f8e9]'
   let labelClass = 'bg-gray-200 text-gray-600'
   let textClass = 'text-gray-700'
   let icon: React.ReactNode = null
 
   if (selected && !correct && !wrong) {
-    // 已选中但未提交
-    containerClass = 'border-[#58CC02] bg-[#f1f8e9]'
-    labelClass = 'bg-[#58CC02] text-white'
+    // 已选中但未提交 - 蓝色边框 + 浅蓝背景
+    containerClass = 'border-[#1CB0F6] bg-[#F0F8FF]'
+    labelClass = 'bg-[#1CB0F6] text-white'
   }
 
   if (correct) {
-    // 正确答案
-    containerClass = 'border-[#58CC02] bg-[#e8f5e9]'
+    // 正确答案 - 绿色边框 + 浅绿背景
+    containerClass = 'border-[#58CC02] bg-[#E8F5E9]'
     labelClass = 'bg-[#58CC02] text-white'
     textClass = 'text-[#2e7d32]'
     icon = (
@@ -53,8 +53,8 @@ export default function OptionItem({
   }
 
   if (wrong) {
-    // 错误答案
-    containerClass = 'border-[#FF4B4B] bg-[#ffebee]'
+    // 错误答案 - 红色边框 + 浅红背景
+    containerClass = 'border-[#FF4B4B] bg-[#FFF0F0]'
     labelClass = 'bg-[#FF4B4B] text-white'
     textClass = 'text-[#c62828]'
     icon = (

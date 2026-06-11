@@ -111,25 +111,25 @@ export default function Review() {
           <h1 className="text-gray-800 text-2xl font-bold">复习</h1>
         </div>
 
-        {/* 标签切换 */}
+        {/* 标签切换 - underline 风格 */}
         <div className="px-5 mb-4">
-          <div className="flex bg-gray-200 rounded-[20px] p-1">
+          <div className="flex border-b border-gray-200">
             <button
               onClick={() => setActiveTab('wrong')}
-              className={`flex-1 py-2.5 rounded-[20px] text-sm font-bold transition-all ${
+              className={`flex-1 py-2.5 text-sm font-bold transition-all border-b-2 -mb-px ${
                 activeTab === 'wrong'
-                  ? 'bg-[#58CC02] text-white shadow-lg'
-                  : 'bg-transparent text-gray-500'
+                  ? 'text-[#58CC02] border-[#58CC02]'
+                  : 'text-gray-400 border-transparent'
               }`}
             >
               错题本 ({wrongQuestions.length})
             </button>
             <button
               onClick={() => setActiveTab('knowledge')}
-              className={`flex-1 py-2.5 rounded-[20px] text-sm font-bold transition-all ${
+              className={`flex-1 py-2.5 text-sm font-bold transition-all border-b-2 -mb-px ${
                 activeTab === 'knowledge'
-                  ? 'bg-[#58CC02] text-white shadow-lg'
-                  : 'bg-transparent text-gray-500'
+                  ? 'text-[#58CC02] border-[#58CC02]'
+                  : 'text-gray-400 border-transparent'
               }`}
             >
               知识卡片
@@ -148,16 +148,16 @@ export default function Review() {
                 exit={{ opacity: 0, x: 20 }}
                 className="space-y-3"
               >
-                {/* 筛选标签 */}
+                {/* 筛选标签 - chip 风格 */}
                 <div className="flex flex-wrap gap-2 mb-3">
                   {filterTags.map((tag) => (
                     <button
                       key={tag}
                       onClick={() => setActiveFilter(tag)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+                      className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all border-l-2 ${
                         activeFilter === tag
-                          ? 'bg-[#58CC02] text-white'
-                          : 'bg-gray-200 text-gray-500'
+                          ? 'bg-white text-[#58CC02] border-l-[#58CC02] shadow-sm'
+                          : 'bg-transparent text-gray-400 border-l-transparent'
                       }`}
                     >
                       {tag}
@@ -173,7 +173,7 @@ export default function Review() {
                     </p>
                     <button
                       onClick={handleGoQuiz}
-                      className="px-6 py-2.5 bg-[#58CC02] text-white text-sm font-bold rounded-lg shadow-md active:scale-95 transition-transform"
+                      className="px-6 py-2.5 text-white text-sm font-bold rounded-xl btn-3d-green"
                     >
                       去答题
                     </button>
@@ -207,7 +207,7 @@ export default function Review() {
                       </div>
                       <button
                         onClick={handleRepractice}
-                        className="w-full py-2.5 rounded-lg text-sm font-bold bg-[#58CC02] text-white shadow-md active:scale-95 transition-transform"
+                        className="w-full py-2.5 rounded-xl text-sm font-bold text-white btn-3d-green"
                       >
                         重新练习
                       </button>

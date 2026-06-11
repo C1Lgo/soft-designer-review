@@ -190,29 +190,33 @@ export default function Quiz() {
           </motion.div>
         </AnimatePresence>
 
-        {/* 底部按钮 - 固定在底部不随内容滚动 */}
+        {/* 底部按钮 - 3D 立体风格 */}
         <div className="shrink-0 mt-6">
           {!isSubmitted ? (
-            <motion.button
-              whileTap={{ scale: 0.97 }}
+            <button
               onClick={handleSubmit}
               disabled={!selectedAnswer}
-              className={`w-full py-4 rounded-2xl text-base font-bold transition-all ${
+              className={`w-full py-4 text-base font-bold transition-all rounded-xl ${
                 selectedAnswer
-                  ? 'bg-[#58CC02] text-white shadow-lg shadow-[#58CC02]/30 active:bg-[#45a501]'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  ? 'btn-3d-green'
+                  : 'btn-3d-green'
               }`}
+              style={!selectedAnswer ? {
+                background: '#E5E5E5',
+                borderColor: '#CFCFCF',
+                color: '#AFAFAF',
+                cursor: 'not-allowed',
+              } : undefined}
             >
               确认答案
-            </motion.button>
+            </button>
           ) : (
-            <motion.button
-              whileTap={{ scale: 0.97 }}
+            <button
               onClick={handleNext}
-              className="w-full py-4 rounded-2xl text-base font-bold bg-[#58CC02] text-white shadow-lg shadow-[#58CC02]/30 active:bg-[#45a501]"
+              className="w-full py-4 text-base font-bold btn-3d-green rounded-xl"
             >
               {currentIndex + 1 >= totalQuestions ? '查看结果' : '下一题'}
-            </motion.button>
+            </button>
           )}
         </div>
       </div>

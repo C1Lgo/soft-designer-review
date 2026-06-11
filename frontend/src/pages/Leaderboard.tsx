@@ -73,18 +73,18 @@ export default function Leaderboard() {
           <p className="text-white/80 text-sm">本周学习达人</p>
         </div>
 
-        {/* 标签切换区域 - 白色卡片容器 */}
+        {/* 标签切换区域 - underline 风格白色卡片 */}
         <div className="px-5 -mt-4 mb-4">
-          <div className="bg-white rounded-xl shadow-md p-1.5">
-            <div className="flex bg-gray-100 rounded-[10px] p-1">
+          <div className="bg-white rounded-xl shadow-md">
+            <div className="flex border-b border-gray-200">
               {tabs.map((tab) => (
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`flex-1 py-2.5 rounded-[10px] text-sm font-bold transition-all ${
+                  className={`flex-1 py-2.5 text-sm font-bold transition-all border-b-2 -mb-px ${
                     activeTab === tab.key
-                      ? 'bg-[#FF9600] text-white shadow-lg'
-                      : 'bg-transparent text-gray-500'
+                      ? 'text-[#FF9600] border-[#FF9600]'
+                      : 'text-gray-400 border-transparent'
                   }`}
                 >
                   {tab.label}

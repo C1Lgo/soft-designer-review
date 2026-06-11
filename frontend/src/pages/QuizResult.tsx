@@ -139,26 +139,26 @@ export default function QuizResult() {
           </motion.div>
         </div>
 
-        {/* 操作按钮区域 - 固定在底部不随内容滚动 */}
+        {/* 操作按钮区域 - 3D 立体风格 */}
         <div className="shrink-0 px-5 mt-6 space-y-3 pb-8">
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={handleContinue}
-            className="w-full py-4 rounded-2xl text-base font-bold bg-[#58CC02] text-white shadow-lg shadow-[#58CC02]/30 active:bg-[#45a501]"
+            className="w-full py-4 text-base font-bold btn-3d-green rounded-xl"
           >
             继续学习
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={handleReview}
-            className="w-full py-4 rounded-2xl text-base font-bold bg-white text-gray-700 border-2 border-gray-200 active:bg-gray-50"
+            className="w-full py-4 text-base font-bold btn-3d-white rounded-xl"
           >
             查看解析
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={handleShare}
-            className="w-full py-4 rounded-2xl text-base font-bold bg-white text-gray-700 border-2 border-gray-200 active:bg-gray-50"
+            className="w-full py-4 text-base font-bold btn-3d-white rounded-xl"
           >
             分享成绩
           </motion.button>

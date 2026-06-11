@@ -69,3 +69,72 @@ body {
 .animate-pulse-ring {
   animation: pulse-ring 2s ease-in-out infinite;
 }
+
+/* 多邻国风格 3D 按钮 - 绿色 */
+.btn-3d-green {
+  background: #58CC02 !important;
+  border: none !important;
+  border-bottom: 4px solid #46a302 !important;
+  border-radius: 16px !important;
+  color: white !important;
+  font-weight: 700;
+  box-shadow: 0 4px 0 #3a8a01, 0 6px 12px rgba(88, 204, 2, 0.25);
+  transition: all 0.08s ease;
+  cursor: pointer;
+  position: relative;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+.btn-3d-green::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 100%);
+  border-radius: 16px 16px 0 0;
+  pointer-events: none;
+}
+.btn-3d-green:active {
+  box-shadow: 0 1px 0 #3a8a01, 0 2px 4px rgba(88, 204, 2, 0.15);
+  transform: translateY(3px);
+}
+.btn-3d-green:disabled {
+  background: #E5E5E5 !important;
+  box-shadow: 0 4px 0 #CFCFCF, 0 6px 8px rgba(0,0,0,0.08);
+  color: #AFAFAF !important;
+  text-shadow: none;
+  cursor: not-allowed;
+}
+.btn-3d-green:disabled::before {
+  background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+}
+
+/* 多邻国风格 3D 按钮 - 白色 */
+.btn-3d-white {
+  background: #fff !important;
+  border: none !important;
+  border-bottom: 4px solid #CDCDCD !important;
+  border-radius: 16px !important;
+  color: #5C5C5C !important;
+  font-weight: 700;
+  box-shadow: 0 4px 0 #BFBFBF, 0 6px 12px rgba(0,0,0,0.06);
+  transition: all 0.08s ease;
+  cursor: pointer;
+  position: relative;
+}
+.btn-3d-white::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%);
+  border-radius: 16px 16px 0 0;
+  pointer-events: none;
+}
+.btn-3d-white:active {
+  box-shadow: 0 1px 0 #BFBFBF, 0 2px 4px rgba(0,0,0,0.04);
+  transform: translateY(3px);
+}
