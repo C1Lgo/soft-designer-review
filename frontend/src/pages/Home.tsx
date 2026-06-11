@@ -1,12 +1,10 @@
 /**
  * 首页 - 学习路径
- * 顶部绿色渐变 header，显示用户头像、连胜天数、宝石
- * 学习路径列表，底部导航栏
- * 章节进度根据用户答题记录动态计算
+ * 重新设计的首页，包含绿色渐变 Header、学习路径列表、底部导航栏
+ * Web 端在手机框架内显示，移动端全屏显示
  */
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import useStore from '@/store/useStore'
 import { chapters } from '@/data/chapters'
 import { allQuestions } from '@/data/questions'
@@ -60,74 +58,56 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-[#131f24] pb-20">
-      <div className="max-w-[430px] mx-auto">
+    <div className="h-full flex flex-col bg-white overflow-hidden">
+      {/* 可滚动内容区域 */}
+      <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide">
         {/* 顶部绿色渐变 Header */}
-        <div className="bg-gradient-to-b from-[#58CC02] to-[#46a302] px-5 pt-12 pb-8 rounded-b-3xl">
-          {/* 用户信息栏 */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              {/* 头像 */}
-              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-2xl border-2 border-white/40">
-                {user.avatar ? (
-                  <img
-                    src={user.avatar}
-                    alt={user.username}
-                    className="w-full h-full rounded-full object-cover"
-                  />
-                ) : (
-                  <span>😊</span>
-                )}
-              </div>
-              <div>
-                <p className="text-white font-bold text-base">{user.username}</p>
-                <p className="text-white/70 text-xs">Lv.{user.level}</p>
-              </div>
+        <div className="bg-gradient-to-b from-[#58CC02] to-[#45a501] px-4 pt-6 pb-6 rounded-b-3xl">
+          {/* 第一行：用户头像、连胜天数、宝石数量 */}
+          <div className="flex items-center justify-between mb-4">
+            {/* 用户头像 */}
+            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-xl shadow-sm">
+              <span>👤</span>
             </div>
 
             {/* 连胜和宝石 */}
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1 bg-white/20 rounded-full px-3 py-1.5">
-                <span className="text-base">🔥</span>
-                <span className="text-white font-bold text-sm">{user.streak}</span>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 bg-white/20 rounded-full px-2.5 py-1">
+                <span className="text-sm">🔥</span>
+                <span className="text-white font-bold text-xs">{user.streak || 12}天</span>
               </div>
-              <div className="flex items-center gap-1 bg-white/20 rounded-full px-3 py-1.5">
-                <span className="text-base">💎</span>
-                <span className="text-white font-bold text-sm">{user.gems}</span>
+              <div className="flex items-center gap-1 bg-white/20 rounded-full px-2.5 py-1">
+                <span className="text-sm">💎</span>
+                <span className="text-white font-bold text-xs">{user.gems || 258}</span>
               </div>
             </div>
           </div>
 
-          {/* 经验值进度条 */}
-          <div className="bg-white/20 rounded-full h-3 overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{
-                width: `${(user.xp / user.xpToNextLevel) * 100}%`,
-              }}
-              transition={{ duration: 1, ease: 'easeOut' }}
-              className="h-full bg-white rounded-full"
-            />
+          {/* 第二行：大标题和副标题 */}
+          <div className="text-center">
+            <h1 className="text-white font-bold text-2xl mb-1">软件设计师</h1>
+            <p className="text-white/80 text-sm">今日已学习 15 分钟</p>
           </div>
-          <p className="text-white/70 text-xs mt-1 text-right">
-            {user.xp}/{user.xpToNextLevel} XP
-          </p>
         </div>
 
-        {/* 学习路径列表 */}
-        <div className="px-5 pt-6 space-y-6">
-          <h2 className="text-white font-bold text-lg">学习路径</h2>
-          <div className="space-y-3">
+        {/* 学习路径区域 */}
+        <div className="bg-white px-4 py-5">
+          <h2 className="text-gray-800 font-bold text-base mb-4">学习路径</h2>
+          <div className="space-y-0">
             {chaptersWithProgress.map((chapter, index) => (
               <PathNode
                 key={chapter.id}
                 chapter={chapter}
                 index={index}
+                isLast={index === chaptersWithProgress.length - 1}
                 onClick={() => handleChapterClick(chapter.id)}
               />
             ))}
           </div>
         </div>
+
+        {/* 底部留白，避免内容被导航栏遮挡 */}
+        <div className="h-20" />
       </div>
 
       {/* 底部导航栏 */}

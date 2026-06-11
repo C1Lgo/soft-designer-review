@@ -32,6 +32,9 @@ const mockLeaderboard: Record<string, LeaderboardUser[]> = {
   ],
 }
 
+/** 当前用户ID（用于高亮显示） */
+const CURRENT_USER_ID = '3'
+
 /** 标签页类型 */
 type TabType = 'friends' | 'national' | 'weekly'
 
@@ -48,13 +51,13 @@ const medalMap: Record<number, string> = {
   3: '🥉',
 }
 
-/** 头像颜色映射 */
-const avatarColors = [
-  'bg-[#FF9600]',
-  'bg-[#1CB0F6]',
-  'bg-[#CE82FF]',
-  'bg-[#58CC02]',
-  'bg-[#FF4B4B]',
+/** 头像渐变色映射 */
+const avatarGradients = [
+  'from-[#FF9600] to-[#f57c00]',
+  'from-[#1CB0F6] to-[#1976d2]',
+  'from-[#CE82FF] to-[#9c27b0]',
+  'from-[#58CC02] to-[#388e3c]',
+  'from-[#FF4B4B] to-[#d32f2f]',
 ]
 
 export default function Leaderboard() {
@@ -62,30 +65,32 @@ export default function Leaderboard() {
   const users = mockLeaderboard[activeTab]
 
   return (
-    <div className="min-h-screen bg-[#131f24] pb-20">
+    <div className="min-h-screen bg-[#f5f5f5] pb-20">
       <div className="max-w-[430px] mx-auto">
         {/* 橙色渐变 Header */}
-        <div className="bg-gradient-to-b from-[#FF9600] to-[#e08600] px-5 pt-12 pb-8 rounded-b-3xl text-center">
-          <h1 className="text-white text-2xl font-bold mb-1">排行榜</h1>
-          <p className="text-white/80 text-sm">与小伙伴们一较高下</p>
+        <div className="bg-gradient-to-b from-[#FF9600] to-[#f57c00] px-5 pt-12 pb-8 rounded-b-3xl text-center">
+          <h1 className="text-white text-2xl font-bold mb-1">🏆 排行榜</h1>
+          <p className="text-white/80 text-sm">本周学习达人</p>
         </div>
 
-        {/* 标签切换 */}
+        {/* 标签切换区域 - 白色卡片容器 */}
         <div className="px-5 -mt-4 mb-4">
-          <div className="flex bg-gray-800 rounded-xl p-1 shadow-lg">
-            {tabs.map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                className={`flex-1 py-2.5 rounded-lg text-sm font-bold transition-all ${
-                  activeTab === tab.key
-                    ? 'bg-[#FF9600] text-white shadow-lg'
-                    : 'text-gray-400'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
+          <div className="bg-white rounded-xl shadow-md p-1.5">
+            <div className="flex bg-gray-100 rounded-[10px] p-1">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className={`flex-1 py-2.5 rounded-[10px] text-sm font-bold transition-all ${
+                    activeTab === tab.key
+                      ? 'bg-[#FF9600] text-white shadow-lg'
+                      : 'bg-transparent text-gray-500'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -105,14 +110,14 @@ export default function Leaderboard() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.08 }}
-                  className={`flex items-center gap-3 p-4 rounded-2xl ${
-                    user.rank <= 3
-                      ? 'bg-white shadow-md'
-                      : 'bg-gray-800/50'
+                  className={`flex items-center gap-3 p-4 rounded-xl ${
+                    user.id === CURRENT_USER_ID
+                      ? 'bg-[#fffde7] shadow-sm'
+                      : 'bg-white shadow-sm'
                   }`}
                 >
                   {/* 排名/奖牌 */}
-                  <div className="w-10 text-center">
+                  <div className="w-10 text-center shrink-0">
                     {medalMap[user.rank] ? (
                       <span className="text-2xl">{medalMap[user.rank]}</span>
                     ) : (
@@ -122,38 +127,28 @@ export default function Leaderboard() {
                     )}
                   </div>
 
-                  {/* 头像 */}
+                  {/* 头像 - 40px圆形，渐变色背景，显示姓氏 */}
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 ${
-                      avatarColors[index % avatarColors.length]
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 bg-gradient-to-br ${
+                      avatarGradients[index % avatarGradients.length]
                     }`}
                   >
                     {user.username[0]}
                   </div>
 
                   {/* 用户信息 */}
-                  <div className="flex-1">
-                    <p
-                      className={`text-sm font-bold ${
-                        user.rank <= 3 ? 'text-gray-800' : 'text-gray-300'
-                      }`}
-                    >
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[15px] font-bold text-gray-800 truncate">
                       {user.username}
                     </p>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-xs text-gray-400">
-                        🔥 {user.streak}天
-                      </span>
-                    </div>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      🔥 {user.streak}天连胜
+                    </p>
                   </div>
 
                   {/* XP 分数 */}
-                  <div className="text-right">
-                    <p
-                      className={`text-sm font-bold ${
-                        user.rank <= 3 ? 'text-[#FF9600]' : 'text-gray-400'
-                      }`}
-                    >
+                  <div className="text-right shrink-0">
+                    <p className="text-base font-bold text-[#FF9600]">
                       {user.xp.toLocaleString()}
                     </p>
                     <p className="text-xs text-gray-400">XP</p>

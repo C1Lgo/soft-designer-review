@@ -28,6 +28,7 @@ export interface Question {
   chapterId: string
   type: 'single' | 'multiple' | 'judge'  // 单选 / 多选 / 判断
   text: string       // 题目文字
+  category?: string  // 题目分类（如数据结构、操作系统等）
   options: Option[]
   answer: string      // 正确答案（如 "A" 或 "A,B" 或 "true/false"）
   explanation: string // 解析

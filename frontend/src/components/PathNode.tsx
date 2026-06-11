@@ -1,6 +1,7 @@
 /**
  * 学习路径节点组件
- * 显示章节图标、标题、进度条
+ * 显示章节图标、标题、进度条，支持三种状态：已完成、当前进行中、未解锁
+ * 当前进行中节点带脉冲动画效果
  */
 import { motion } from 'framer-motion'
 import type { Chapter } from '@/types'
@@ -8,89 +9,112 @@ import type { Chapter } from '@/types'
 interface PathNodeProps {
   chapter: Chapter
   index: number
+  isLast: boolean
   onClick: () => void
 }
 
-export default function PathNode({ chapter, index, onClick }: PathNodeProps) {
+export default function PathNode({ chapter, index, isLast, onClick }: PathNodeProps) {
   const isLocked = chapter.status === 'locked'
   const isCompleted = chapter.status === 'completed'
   const isCurrent = chapter.status === 'current'
 
-  // 节点图标样式
-  let nodeStyle = 'bg-gray-200 text-gray-400'
-  let iconExtra = ''
-  if (isCompleted) {
-    nodeStyle = 'bg-[#58CC02] text-white'
-    iconExtra = '✓'
-  } else if (isCurrent) {
-    nodeStyle = 'bg-[#FF9600] text-white animate-pulse'
+  // 根据状态获取图标和样式
+  const getNodeIcon = () => {
+    if (isCompleted) {
+      return {
+        icon: '✓',
+        bgColor: 'bg-[#58CC02]',
+        textColor: 'text-white',
+      }
+    } else if (isCurrent) {
+      return {
+        icon: '📚',
+        bgColor: 'bg-[#FF9600]',
+        textColor: 'text-white',
+      }
+    } else {
+      return {
+        icon: '🔒',
+        bgColor: 'bg-[#e0e0e0]',
+        textColor: 'text-[#9e9e9e]',
+      }
+    }
   }
+
+  const { icon, bgColor, textColor } = getNodeIcon()
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.1, duration: 0.3 }}
       className="relative"
     >
-      {/* 连接线 */}
-      {index > 0 && (
-        <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-0.5 h-6 bg-gray-200" />
+      {/* 节点之间的连接线 - 灰色竖线 */}
+      {!isLast && (
+        <div className="absolute left-[22px] top-[48px] w-[2px] h-[calc(100%-24px)] bg-[#e0e0e0]" />
       )}
 
       <button
         onClick={onClick}
         disabled={isLocked}
-        className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all ${
+        className={`w-full flex items-start gap-3 py-3 transition-all ${
           isLocked
-            ? 'bg-gray-50 opacity-60 cursor-not-allowed'
-            : isCurrent
-            ? 'bg-white shadow-md border-2 border-[#FF9600]/30 cursor-pointer hover:shadow-lg'
-            : 'bg-white shadow-sm border border-gray-100 cursor-pointer hover:shadow-md'
+            ? 'opacity-60 cursor-not-allowed'
+            : 'cursor-pointer hover:bg-gray-50/50'
         }`}
       >
-        {/* 章节图标 */}
-        <div
-          className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shrink-0 ${nodeStyle}`}
-        >
-          {isCompleted ? iconExtra : isLocked ? '🔒' : chapter.icon}
+        {/* 左侧圆形图标 */}
+        <div className="relative shrink-0">
+          {/* 脉冲动画环 - 仅当前进行中节点显示 */}
+          {isCurrent && (
+            <div className={`absolute inset-0 rounded-full ${bgColor} animate-pulse-ring opacity-30`} />
+          )}
+
+          {/* 图标容器 */}
+          <div
+            className={`w-11 h-11 rounded-full flex items-center justify-center text-lg font-bold ${bgColor} ${textColor} relative z-10 shadow-sm`}
+          >
+            {icon}
+          </div>
         </div>
 
-        {/* 章节信息 */}
-        <div className="flex-1 text-left">
+        {/* 中间：章节信息 */}
+        <div className="flex-1 pt-1 text-left">
+          {/* 章节标题 */}
           <h3
-            className={`text-sm font-bold mb-0.5 ${
-              isLocked ? 'text-gray-400' : 'text-gray-800'
+            className={`text-[15px] font-bold mb-0.5 ${
+              isLocked ? 'text-[#9e9e9e]' : 'text-gray-800'
             }`}
           >
             {chapter.title}
           </h3>
-          <p className="text-xs text-gray-400 mb-2">{chapter.description}</p>
 
-          {/* 进度条 */}
+          {/* 章节描述 */}
+          <p className={`text-xs mb-2 ${isLocked ? 'text-[#bdbdbd]' : 'text-gray-500'}`}>
+            {chapter.description}
+          </p>
+
+          {/* 进度条 - 仅非锁定状态显示 */}
           {!isLocked && (
             <div className="flex items-center gap-2">
-              <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+              {/* 进度条背景 */}
+              <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                {/* 进度条填充 */}
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${
-                    isCompleted
-                      ? 'bg-[#58CC02]'
-                      : 'bg-[#FF9600]'
+                    isCompleted ? 'bg-[#58CC02]' : 'bg-[#58CC02]'
                   }`}
                   style={{ width: `${chapter.progress}%` }}
                 />
               </div>
+              {/* 进度文字 */}
               <span className="text-xs text-gray-400 font-medium">
                 {chapter.completedQuestions}/{chapter.totalQuestions}
               </span>
             </div>
           )}
         </div>
-
-        {/* 右侧箭头 */}
-        {!isLocked && (
-          <span className="text-gray-300 text-lg">›</span>
-        )}
       </button>
     </motion.div>
   )

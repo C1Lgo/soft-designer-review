@@ -1,6 +1,6 @@
 /**
  * 答题页面
- * 顶部进度条 + 题号，题目卡片，选项列表，底部按钮
+ * 顶部进度条 + 题号，题目卡片，选项列表，底部按钮，解析区域
  * 数据来源：本地题库 allQuestions
  */
 import { useState, useMemo } from 'react'
@@ -100,31 +100,40 @@ export default function Quiz() {
   const progressPercent = ((currentIndex + 1) / totalQuestions) * 100
 
   return (
-    <div className="min-h-screen bg-[#131f24]">
+    <div className="min-h-screen bg-[#f5f5f5]">
       <div className="max-w-[430px] mx-auto px-5 pt-8 pb-6">
-        {/* 顶部进度条 */}
+        {/* 顶部区域：退出按钮 + 进度条 + 题号 */}
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-3">
+            {/* 左侧：退出按钮（圆形灰色背景） */}
             <button
               onClick={() => navigate('/')}
-              className="text-white/60 hover:text-white text-sm"
+              className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-300 transition-colors"
             >
-              ✕ 退出
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
             </button>
-            <span className="text-white/60 text-sm font-medium">
+
+            {/* 中间：进度条 */}
+            <div className="flex-1 mx-4">
+              <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ width: `${(currentIndex / totalQuestions) * 100}%` }}
+                  animate={{ width: `${progressPercent}%` }}
+                  className="h-full bg-[#58CC02] rounded-full transition-all duration-500"
+                />
+              </div>
+            </div>
+
+            {/* 右侧：题号显示 */}
+            <span className="text-sm font-bold text-gray-600 whitespace-nowrap">
               {currentIndex + 1}/{totalQuestions}
             </span>
           </div>
-          <div className="h-3 bg-gray-700 rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: `${(currentIndex / totalQuestions) * 100}%` }}
-              animate={{ width: `${progressPercent}%` }}
-              className="h-full bg-[#58CC02] rounded-full transition-all duration-500"
-            />
-          </div>
         </div>
 
-        {/* 题目卡片 */}
+        {/* 题目卡片区域 */}
         <AnimatePresence mode="wait">
           <motion.div
             key={currentQuestion.id}
@@ -139,7 +148,7 @@ export default function Quiz() {
               totalQuestions={totalQuestions}
             />
 
-            {/* 选项列表 */}
+            {/* 选项区域 */}
             <div className="mt-4 space-y-3">
               {currentQuestion.options.map((option) => {
                 const isSelected = selectedAnswer === option.label
@@ -163,15 +172,18 @@ export default function Quiz() {
               })}
             </div>
 
-            {/* 解析（答题后显示） */}
+            {/* 解析区域（答题后显示） */}
             {isSubmitted && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-100"
+                className="mt-4 p-4 bg-[#e8f5e9] rounded-2xl border border-[#c8e6c9]"
               >
-                <p className="text-sm font-bold text-blue-600 mb-1">解析</p>
-                <p className="text-sm text-blue-700 leading-relaxed">
+                <p className="text-sm font-bold text-[#2e7d32] mb-1">解析</p>
+                <p className="text-sm text-[#388e3c] leading-relaxed">
+                  正确答案：<span className="font-bold">{currentQuestion.answer}</span>
+                </p>
+                <p className="text-sm text-[#555] leading-relaxed mt-2">
                   {currentQuestion.explanation}
                 </p>
               </motion.div>
@@ -188,8 +200,8 @@ export default function Quiz() {
               disabled={!selectedAnswer}
               className={`w-full py-4 rounded-2xl text-base font-bold transition-all ${
                 selectedAnswer
-                  ? 'bg-[#58CC02] text-white shadow-lg shadow-[#58CC02]/30 active:bg-[#46a302]'
-                  : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                  ? 'bg-[#58CC02] text-white shadow-lg shadow-[#58CC02]/30 active:bg-[#45a501]'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >
               确认答案
@@ -198,7 +210,7 @@ export default function Quiz() {
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={handleNext}
-              className="w-full py-4 rounded-2xl text-base font-bold bg-[#58CC02] text-white shadow-lg shadow-[#58CC02]/30 active:bg-[#46a302]"
+              className="w-full py-4 rounded-2xl text-base font-bold bg-[#58CC02] text-white shadow-lg shadow-[#58CC02]/30 active:bg-[#45a501]"
             >
               {currentIndex + 1 >= totalQuestions ? '查看结果' : '下一题'}
             </motion.button>
