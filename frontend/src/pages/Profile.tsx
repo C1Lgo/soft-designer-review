@@ -56,8 +56,8 @@ export default function Profile() {
   const user = useStore((s) => s.user)
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5] pb-20">
-      <div className="max-w-[430px] mx-auto">
+    <div className="h-full flex flex-col bg-[#f5f5f5]">
+      <div className="flex-1 overflow-y-auto">
         {/* 蓝色渐变 Header */}
         <div className="bg-gradient-to-b from-[#1CB0F6] to-[#1976d2] px-5 pt-12 pb-10 rounded-b-3xl text-center">
           {/* 用户头像 - 80px圆形，白色背景，👨‍💻 emoji，阴影 */}

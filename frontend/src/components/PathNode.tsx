@@ -2,9 +2,25 @@
  * 学习路径节点组件
  * 显示章节图标、标题、进度条，支持三种状态：已完成、当前进行中、未解锁
  * 当前进行中节点带脉冲动画效果
+ * 使用内联 SVG 图标（stroke-based，currentColor）
  */
 import { motion } from 'framer-motion'
 import type { Chapter } from '@/types'
+
+/** 已完成图标 - Checkmark */
+const CheckIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+)
+
+/** 当前学习图标 - BookOpen */
+const BookOpenIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+)
+
+/** 锁定图标 - Lock */
+const LockIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+)
 
 interface PathNodeProps {
   chapter: Chapter
@@ -18,30 +34,30 @@ export default function PathNode({ chapter, index, isLast, onClick }: PathNodePr
   const isCompleted = chapter.status === 'completed'
   const isCurrent = chapter.status === 'current'
 
-  // 根据状态获取图标和样式
-  const getNodeIcon = () => {
+  // 根据状态获取图标组件和样式
+  const getNodeInfo = () => {
     if (isCompleted) {
       return {
-        icon: '✓',
+        Icon: CheckIcon,
         bgColor: 'bg-[#58CC02]',
         textColor: 'text-white',
       }
     } else if (isCurrent) {
       return {
-        icon: '📚',
+        Icon: BookOpenIcon,
         bgColor: 'bg-[#FF9600]',
         textColor: 'text-white',
       }
     } else {
       return {
-        icon: '🔒',
+        Icon: LockIcon,
         bgColor: 'bg-[#e0e0e0]',
         textColor: 'text-[#9e9e9e]',
       }
     }
   }
 
-  const { icon, bgColor, textColor } = getNodeIcon()
+  const { Icon, bgColor, textColor } = getNodeInfo()
 
   return (
     <motion.div
@@ -73,9 +89,9 @@ export default function PathNode({ chapter, index, isLast, onClick }: PathNodePr
 
           {/* 图标容器 */}
           <div
-            className={`w-11 h-11 rounded-full flex items-center justify-center text-lg font-bold ${bgColor} ${textColor} relative z-10 shadow-sm`}
+            className={`w-11 h-11 rounded-full flex items-center justify-center ${bgColor} ${textColor} relative z-10 shadow-sm`}
           >
-            {icon}
+            <Icon />
           </div>
         </div>
 

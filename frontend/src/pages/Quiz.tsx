@@ -100,8 +100,8 @@ export default function Quiz() {
   const progressPercent = ((currentIndex + 1) / totalQuestions) * 100
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5]">
-      <div className="max-w-[430px] mx-auto px-5 pt-8 pb-6">
+    <div className="h-full flex flex-col bg-[#f5f5f5]">
+      <div className="flex-1 overflow-y-auto px-5 pt-6 pb-6">
         {/* 顶部区域：退出按钮 + 进度条 + 题号 */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-3">
@@ -110,9 +110,8 @@ export default function Quiz() {
               onClick={() => navigate('/')}
               className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-300 transition-colors"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
+              {/* 精致的关闭 SVG 图标 */}
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
 
             {/* 中间：进度条 */}
@@ -191,8 +190,8 @@ export default function Quiz() {
           </motion.div>
         </AnimatePresence>
 
-        {/* 底部按钮 */}
-        <div className="mt-6">
+        {/* 底部按钮 - 固定在底部不随内容滚动 */}
+        <div className="shrink-0 mt-6">
           {!isSubmitted ? (
             <motion.button
               whileTap={{ scale: 0.97 }}

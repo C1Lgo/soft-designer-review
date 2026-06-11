@@ -104,8 +104,8 @@ export default function Review() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5] pb-20">
-      <div className="max-w-[430px] mx-auto">
+    <div className="h-full flex flex-col bg-[#f5f5f5]">
+      <div className="flex-1 overflow-y-auto">
         {/* 顶部标题 */}
         <div className="px-5 pt-12 pb-4 text-center">
           <h1 className="text-gray-800 text-2xl font-bold">复习</h1>

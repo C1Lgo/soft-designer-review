@@ -65,9 +65,9 @@ export default function Home() {
         <div className="bg-gradient-to-b from-[#58CC02] to-[#45a501] px-4 pt-6 pb-6 rounded-b-3xl">
           {/* 第一行：用户头像、连胜天数、宝石数量 */}
           <div className="flex items-center justify-between mb-4">
-            {/* 用户头像 */}
-            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-xl shadow-sm">
-              <span>👤</span>
+            {/* 用户头像 - SVG user circle 图标 */}
+            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#58CC02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </div>
 
             {/* 连胜和宝石 */}

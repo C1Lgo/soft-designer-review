@@ -65,8 +65,8 @@ export default function Leaderboard() {
   const users = mockLeaderboard[activeTab]
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5] pb-20">
-      <div className="max-w-[430px] mx-auto">
+    <div className="h-full flex flex-col bg-[#f5f5f5]">
+      <div className="flex-1 overflow-y-auto">
         {/* 橙色渐变 Header */}
         <div className="bg-gradient-to-b from-[#FF9600] to-[#f57c00] px-5 pt-12 pb-8 rounded-b-3xl text-center">
           <h1 className="text-white text-2xl font-bold mb-1">🏆 排行榜</h1>

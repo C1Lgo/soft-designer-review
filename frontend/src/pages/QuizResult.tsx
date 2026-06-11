@@ -44,8 +44,8 @@ export default function QuizResult() {
   const xpNeeded = user.xpToNextLevel - user.xp
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5]">
-      <div className="max-w-[430px] mx-auto">
+    <div className="h-full flex flex-col bg-[#f5f5f5]">
+      <div className="flex-1 overflow-y-auto">
         {/* 顶部庆祝区域：绿色渐变背景 */}
         <div className="bg-gradient-to-b from-[#58CC02] to-[#45a501] px-5 pt-12 pb-12 rounded-b-[32px] text-center">
           <motion.div
@@ -139,8 +139,8 @@ export default function QuizResult() {
           </motion.div>
         </div>
 
-        {/* 操作按钮区域 */}
-        <div className="px-5 mt-6 space-y-3 pb-8">
+        {/* 操作按钮区域 - 固定在底部不随内容滚动 */}
+        <div className="shrink-0 px-5 mt-6 space-y-3 pb-8">
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={handleContinue}
